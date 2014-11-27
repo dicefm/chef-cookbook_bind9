@@ -15,6 +15,10 @@ options {
   // to talk to, you may need to fix the firewall to allow multiple
   // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
 
+  <% if node[:bind9][:recursion] %>
+  recursion yes;
+
+  <% end %>
   <% if node[:bind9][:allow_query] %>
     <% if node[:bind9][:enable_acls] %>
     allow-query {

@@ -1,5 +1,8 @@
 default[:bind9][:enable_ipv6] = true
 
+# Disable recursion by default
+default[:bind9][:recursion] = false
+
 # Don't define any ACLs by default
 default[:bind9][:enable_acls] = false
 default[:bind9][:acls] = []
