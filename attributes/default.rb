@@ -1,5 +1,9 @@
 default[:bind9][:enable_ipv6] = true
 
+# Don't define any ACLs by default
+default[:bind9][:enable_acls] = false
+default[:bind9][:acls] = []
+
 # Allow all clients to query the nameserver, no recursion
 default[:bind9][:allow_query] = nil
 default[:bind9][:allow_recursion] = "none"

@@ -1,3 +1,13 @@
+<% if node[:bind9][:enable_acls] and node[:bind9][:acls].kind_of?(Array) %>
+  <% for acl in node[:bind9][:acls] %>
+acl <%= acl["name"] %> {
+    <% for entry in acl["entries"] %>
+  <%= entry %>;
+    <% end %>
+};
+
+  <% end %>
+<% end %>
 options {
   directory "<%= node[:bind9][:data_path] %>";
 
@@ -6,23 +16,41 @@ options {
   // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
 
   <% if node[:bind9][:allow_query] %>
+    <% if node[:bind9][:enable_acls] %>
+    allow-query {
+      <%= node[:bind9][:allow_query] %>;
+    };
+    <% else %>
     allow-query {
       "<%= node[:bind9][:allow_query] %>";
     };
+    <% end %>
 
   <% end %>
     allow-recursion {
       <%= node[:bind9][:allow_recursion] %>;
     };
 
+  <% if node[:bind9][:enable_acls] %>
+    allow-transfer {
+      <%= node[:bind9][:allow_transfer] %>;
+    };
+  <% else %>
     allow-transfer {
       "<%= node[:bind9][:allow_transfer] %>";
     };
+  <% end %>
 
   <% if node[:bind9][:allow_update] %>
+    <% if node[:bind9][:enable_acls] %>
+    allow-update {
+      <%= node[:bind9][:allow_update] %>;
+    };
+    <% elsif node[:bind9][:allow_update].kind_of?(Symbol) %>
     allow-update {
       "<%= node[:bind9][:allow_update] %>";
     };
+    <% end %>
 
   <% end %>
   <% if node[:bind9][:enable_forwarding] %>
